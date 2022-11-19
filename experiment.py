@@ -58,9 +58,9 @@ def experiment(key_name, start_e, end_e):
     print("    train_buildings: {}".format(train_buildings))
 
     # Open train sets
-    X_train = np.load("dataset/trainsets/X-{}.npy".format(key_name))
-    print("X_train ", X_train)
-    X_train = normalize(X_train, mamax, mean, std)
+    x_train = np.load("dataset/trainsets/X-{}.npy".format(key_name))
+    print("X_train ", x_train)
+    x_train = normalize(x_train, mamax, mean, std)
     y_train = np.load("dataset/trainsets/Y-{}.npy".format(key_name))
     print("y_train ", y_train)
     y_train = normalize(y_train, memax, mean, std)
@@ -73,7 +73,7 @@ def experiment(key_name, start_e, end_e):
     if end_e > start_e:
         filepath = save_path + "CHECKPOINT-" + key_name + "-{epoch:01d}epochs.hdf5"
         checkpoint = ModelCheckpoint(filepath, verbose=1, save_best_only=False)
-        history = model.fit(X_train, y_train, batch_size=128, epochs=end_e, shuffle=True, initial_epoch=start_e,
+        history = model.fit(x_train, y_train, batch_size=128, epochs=end_e, shuffle=True, initial_epoch=start_e,
                             callbacks=[checkpoint])
         losses = history.history['loss']
 
