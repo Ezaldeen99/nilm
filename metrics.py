@@ -37,6 +37,12 @@ def mean_absolute_error(pred, ground):
     return total_sum / len(pred)
 
 
+def mean_square_error(pred, ground):
+    total_sum = np.sum(np.abs(pred - ground) ^ 2)
+
+    return total_sum / len(pred)
+
+
 def recall(tp, fn):
     return tp / float(tp + fn)
 
