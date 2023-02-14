@@ -1,10 +1,13 @@
-# ShortSeq2Point
-A modified version of the Sequence-to-point network.
+# NILM using Flower framework
 
-Improvements:
+A modified version of the Sequence-to-point network learning
+to build an NILM using Flower framework to train multi clients
 
-- Smaller window lengths (5-10 mins) to make it suitable for real-time applications.
-- Added dropout
+
+## Before Setup:
+
+- Download ukDALE dataset from [here](http://data.ukedc.rl.ac.uk/simplebrowse/edc/efficiency/residential/EnergyConsumption/Domestic/UK-DALE-2017/UK-DALE-FULL-disaggregated/ukdale.h5.zip)
+- unzip the dataset to `data` folder
 
 ## To set up the project
 Run
@@ -13,10 +16,11 @@ python gen.py <path to your UKDALE h5>
 ```
 This will create the trainsets and download the Neural NILM test set. The trainset comes from the data used in Neural NILM. This may take some time.
 
+Running the client step below will also try to run generate the dataset with default dataset path at `data\ukdale.h5`, if the user didn't run this method first
 ## To train and test the network
 Run
 ```bash
-python experiment.py <device>
+python client.py <device>
 ```
 Where device can be
 * ```dishwasher```
@@ -25,14 +29,8 @@ Where device can be
 * ```microwave```
 * ```washing_machine```
 
-__OR__
+Then Run
 
-import the experiment function and use it in your code
-```python
-from experiment import experiment
-experiment('kettle', 0, 120)
-```
-This will train the network for 120 epochs. You can resume training like this:
-```python
-experiment('kettle', 120, 130)
+```bash
+python server.py
 ```

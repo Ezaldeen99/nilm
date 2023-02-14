@@ -1,7 +1,6 @@
 """ This script generates train sets from several building data"""
 from __future__ import print_function, division
 
-import json
 import os
 import shutil
 import sys
@@ -36,10 +35,11 @@ def create_trainset(meter, mains, train_size, window_size):
         if chunk.shape[0] < 3000:
             continue
         chunk.fillna(method='ffill', inplace=True)
-        X_batch, Y_batch = generate_batch(chunk.iloc[:, 1], chunk.iloc[:, 0], chunk.shape[0] - window_size, 0, window_size)
-        high_index = min(len(X_batch), train_size - low_index)
-        all_x_train[low_index:high_index + low_index] = X_batch[:high_index]
-        all_y_train[low_index:high_index + low_index] = Y_batch[:high_index]
+        x_batch, y_batch = generate_batch(chunk.iloc[:, 1], chunk.iloc[:, 0], chunk.shape[0] - window_size, 0,
+                                          window_size)
+        high_index = min(len(x_batch), train_size - low_index)
+        all_x_train[low_index:high_index + low_index] = x_batch[:high_index]
+        all_y_train[low_index:high_index + low_index] = y_batch[:high_index]
         low_index = high_index + low_index
         if low_index == train_size:
             break
@@ -89,7 +89,7 @@ def get_test_data(building_number, meter_key):
 
 
 def download_dataset():
-    print("Downloading dataset for the first time")
+    print("Downloading test dataset for the first time")
     os.makedirs("dataset")
     urllib.request.urlretrieve("http://jack-kelly.com/files/neuralnilm/NeuralNILM_data.zip", "dataset/ds.zip")
     import zipfile
@@ -103,16 +103,12 @@ def download_dataset():
     print("Done downloading")
 
 
-if __name__ == "__main__":
-    if len(sys.argv) < 2:
-        print("Usage: python gen.py ukdale_path")
-        exit()
-
+def generate_dataset(dateset_path):
     # get the test dataset if it is not there
     if not os.path.exists("dataset"):
         download_dataset()
 
-    dataset = DataSet(sys.argv[1])
+    dataset = DataSet(dateset_path)
     for device in key_names:
         device_config = get_device_conf(device)
         try:
@@ -139,3 +135,11 @@ if __name__ == "__main__":
 
         np.save('dataset/trainsets/X-{}'.format(device_config.device_db_key), all_x_train)
         np.save('dataset/trainsets/Y-{}'.format(device_config.device_db_key), all_y_train)
+
+
+if __name__ == "__main__":
+    if len(sys.argv) < 2:
+        print("Usage: python gen.py ukdale_path")
+        exit()
+
+    generate_dataset(sys.argv[1])
