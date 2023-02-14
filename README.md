@@ -34,3 +34,8 @@ Then Run
 ```bash
 python server.py
 ```
+
+
+## Get results
+
+The final results can be found in temp files in your machine

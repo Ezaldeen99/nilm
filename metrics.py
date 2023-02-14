@@ -38,7 +38,8 @@ def mean_absolute_error(pred, ground):
 
 
 def mean_square_error(pred, ground):
-    total_sum = np.sum(np.abs(pred - ground) ^ 2)
+    value = np.abs(pred - ground) ** 2
+    total_sum = np.sum(value)
 
     return total_sum / len(pred)
 
